@@ -13,7 +13,6 @@ export const env = createEnv({
 
         NEXTAUTH_SECRET: z.string(),
         NEXT_REFRESH_TOKEN_API: z.string().url(),
-        NEXT_PRODUCT_API: z.string(),
         NEXTAUTH_URL: z.string().url(),
 
         STRIPE_SECRET_KEY: z.string(),
@@ -49,8 +48,6 @@ export const env = createEnv({
     runtimeEnv: {
 
         NEXTAUTH_URL: process.env.NEXTAUTH_URL,
-
-        NEXT_PRODUCT_API: process.env.NEXT_PRODUCT_API,
 
         NEXT_PUBLIC_APP_URL: process.env.NEXT_PUBLIC_APP_URL,
 
