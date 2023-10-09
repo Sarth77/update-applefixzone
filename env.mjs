@@ -37,7 +37,6 @@ export const env = createEnv({
         NEXT_PUBLIC_FIREBASE_DATABASE_URL: z.string().url(),
 
         NEXT_PUBLIC_NEXT_PRODUCT_API: z.string().url(),
-        NEXT_PUBLIC_APP_URL: z.string(),
         NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY: z.string(),
     },
 
@@ -48,8 +47,6 @@ export const env = createEnv({
     runtimeEnv: {
 
         NEXTAUTH_URL: process.env.NEXTAUTH_URL,
-
-        NEXT_PUBLIC_APP_URL: process.env.NEXT_PUBLIC_APP_URL,
 
         GOOGLE_CLIENT_SECRET: process.env.GOOGLE_CLIENT_SECRET,
         GOOGLE_CLIENT_ID: process.env.GOOGLE_CLIENT_ID,
