@@ -1,5 +1,5 @@
 "use client";
-import { firebaseSignOut } from '@/firebase';
+import { firebaseSignOut } from '@/lib/firebase';
 import { signOut } from 'next-auth/react'
 import Link from "next/link";
 import React from "react";

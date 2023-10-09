@@ -1,13 +1,11 @@
 import ProductCard from '@/components/ProductCard';
 import { env } from '@/env.mjs';
-import axios from 'axios';
-import React, { Suspense } from 'react'
 
 const Products = async () => {
 
-    const response = await axios.get(`${env.NEXT_PUBLIC_NEXT_PRODUCT_API}/api/products`)
-    const products = await response?.data?.data
-
+    const url = new URL(`${env.NEXT_PUBLIC_NEXT_PRODUCT_API}/api/products`)
+    const response = await fetch(url).then((res) => res.json())
+    const products = await response?.data
 
     return (
         <>
@@ -20,10 +18,7 @@ const Products = async () => {
                         {products && products.map((product) => {
                             return (
                                 <div key={product.id}>
-                                    <Suspense >
-                                        {/* @js-expect-error Async Server Component*/}
-                                        <ProductCard key={product.id} {...product} />
-                                    </Suspense>
+                                    <ProductCard key={product.id} {...product} />
                                 </div>
                             );
                         })}

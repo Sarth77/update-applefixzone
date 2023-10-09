@@ -1,8 +1,7 @@
-import { auth } from "@/firebase";
+import { auth } from "@/lib/firebase";
 import { signInWithEmailAndPassword } from "@firebase/auth";
 import CredentialsProvider from "next-auth/providers/credentials";
 import { env } from "@/env.mjs";
-import { getToken } from "next-auth/jwt";
 async function refreshToken(token) {
     const url = new URL(`${env.NEXT_REFRESH_TOKEN_API}/v1/token?key=${env.NEXT_PUBLIC_FIREBASE_API_KEY}`)
     const res = await fetch(url, {

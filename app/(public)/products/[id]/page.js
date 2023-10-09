@@ -3,13 +3,22 @@ import Image from "next/image";
 import FormatPrice from "@/helper/FormatPrice";
 import Link from "next/link";
 import AddToCart from "@/components/Buttons/AddToCart";
-import axios from "axios";
+import { env } from "@/env.mjs";
+
+
+export async function generateStaticParams() {
+  const response = await fetch(`${env.NEXT_PUBLIC_NEXT_PRODUCT_API}/api/products`).then((res) => res.json())
+  const products = await response?.data
+  return products.map((product) => ({
+    id: product.id,
+  }))
+}
 
 const Page = async ({ params }) => {
   const productId = await params.id
-  const url = new URL(`http://localhost:3000/api/product?id=${productId}`)
-  const response = await axios.get(url)
-  const product = await response.data.product
+  const url = new URL(`${env.NEXT_PUBLIC_NEXT_PRODUCT_API}/api/products/${productId}`)
+  const response = await fetch(url).then((res) => res.json())
+  const product = await response?.data
   return (
     <div className="max-w-[140rem] my-0 mx-auto py-[2rem] px-[3rem]">
       <h2 className="text-gray-900 text-3xl font-medium font-sans mb-4">
