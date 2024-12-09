@@ -1,25 +1,31 @@
-import { env } from "@/env.mjs";
-import axios from "axios"
-import { NextResponse } from "next/server"
+import { NextResponse } from "next/server";
+import { getProducts } from "@/lib/firebase/products";
 
 export async function GET(request) {
+  try {
+    const products = await getProducts();
 
-    try {
-        const response = await axios.get(`${env.NEXT_PRODUCT_API}/api/products`, {
-            headers: {
-                "Access-Control-Allow-Origin": "*",
-                'Content-Type': 'application/json',
-                'Accept': 'application/json'
-            }
-        });
-        const products = await response?.data?.data
-
-        return NextResponse.json(products)
-
-    } catch (err) {
-        return new NextResponse(
-            `Error: ${err.code}`,
-            { status: 400 }
-        )
+    if (products.length > 0) {
+      return NextResponse.json({
+        status: 200,
+        success: true,
+        data: products,
+      });
+    } else {
+      return NextResponse.json({
+        status: 204,
+        success: false,
+        message: "No products found.",
+        data: [],
+      });
     }
+  } catch (err) {
+    console.error("Error fetching products:", err);
+    return NextResponse.json({
+      status: 500,
+      success: false,
+      message: "Something went wrong. Please try again!",
+      data: [],
+    });
+  }
 }

@@ -1,16 +1,20 @@
-
-await import("./env.mjs")
+await import("./env.mjs");
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-    experimental: {
-        serverComponentsExternalPackages: ["firebase"],
-        serverActions: true,
-    },
-    images: {
-        domains: ["upload.wikimedia.org", "firebasestorage.googleapis.com", "lh3.googleusercontent.com", "encrypted-tbn0.gstatic.com"],
-    }
+  experimental: {
+    serverComponentsExternalPackages: ["firebase"],
+    serverActions: true,
+  },
+  images: {
+    domains: [
+      "upload.wikimedia.org",
+      "firebasestorage.googleapis.com",
+      "lh3.googleusercontent.com",
+      "encrypted-tbn0.gstatic.com",
+      "www.pngall.com",
+    ],
+  },
+};
 
-}
-
-export default nextConfig
+export default nextConfig;

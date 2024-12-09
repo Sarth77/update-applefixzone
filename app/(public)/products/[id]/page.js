@@ -5,20 +5,27 @@ import Link from "next/link";
 import AddToCart from "@/components/Buttons/AddToCart";
 import { env } from "@/env.mjs";
 
-
 export async function generateStaticParams() {
-  const response = await fetch(`${env.NEXT_PUBLIC_NEXT_PRODUCT_API}/api/products`).then((res) => res.json())
-  const products = await response?.data
+  const response = await fetch(
+    `${env.NEXT_PUBLIC_NEXT_PRODUCT_API}/api/products`
+  ).then((res) => res.json());
+  const products = await response?.data;
   return products.map((product) => ({
     id: product.id,
-  }))
+  }));
 }
 
 const Page = async ({ params }) => {
-  const productId = await params.id
-  const url = new URL(`${env.NEXT_PUBLIC_NEXT_PRODUCT_API}/api/products/${productId}`)
-  const response = await fetch(url).then((res) => res.json())
-  const product = await response?.data
+  const productId = await params.id;
+  console.log(productId);
+  const url = new URL(
+    `${process.env.NEXT_PUBLIC_NEXT_PRODUCT_API}/api/product`
+  );
+  url.searchParams.append("id", productId);
+  const response = await fetch(url);
+  console.log("Response Status:", response.status);
+  const data = await response.json(); // Parse the JSON response
+  const product = data.product;
   return (
     <div className="max-w-[140rem] my-0 mx-auto py-[2rem] px-[3rem]">
       <h2 className="text-gray-900 text-3xl font-medium font-sans mb-4">
@@ -122,7 +129,7 @@ const Page = async ({ params }) => {
                 <span className="title-font font-medium text-2xl text-gray-900">
                   <FormatPrice price={product?.price} />
                 </span>
-                <AddToCart product={product} name={'AddToCart'} />
+                <AddToCart product={product} name={"AddToCart"} />
               </div>
             </div>
           </div>

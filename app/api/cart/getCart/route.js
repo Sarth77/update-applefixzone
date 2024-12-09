@@ -1,33 +1,50 @@
 import { getServerSession } from "next-auth";
-import { NextResponse } from "next/server"
+import { NextResponse } from "next/server";
 import { options } from "@/app/api/auth/[...nextauth]/options";
-import axios from "axios";
-import { env } from "@/env.mjs";
+import { getUserCart } from "@/lib/firebase/cart";
+
+export const dynamic = "force-dynamic";
+export const revalidate = 0;
 
 export async function GET(request) {
+  try {
     const session = await getServerSession(options);
-    if (!!session) {
-        try {
-            const cartResponse = await axios.get(`${env.NEXT_PUBLIC_NEXT_PRODUCT_API}/api/cart/${session?.user?.id}`, {
-                headers: {
-                    "Authorization": session?.accessToken
-                }
-            })
-            const cartR = await cartResponse.data.data
-            return NextResponse.json({
-                cartR
-            });
 
-        } catch (err) {
-            return new NextResponse(
-                err.response.data.error,
-                { status: 400 }
-            )
-        }
-
-    } else {
-        const url = new URL(`${process.env.NEXTAUTH_URL}/signin`, request.url)
-        return NextResponse.redirect(url)
+    if (!session?.user?.id) {
+      return NextResponse.redirect(new URL("/signin", request.url));
     }
 
+    const cart = await getUserCart(session.user.id);
+
+    return new NextResponse(
+      JSON.stringify({
+        status: 200,
+        success: true,
+        data: cart.products || [],
+      }),
+      {
+        status: 200,
+        headers: {
+          "Content-Type": "application/json",
+          "Cache-Control": "no-store, must-revalidate",
+          Pragma: "no-cache",
+        },
+      }
+    );
+  } catch (error) {
+    console.error("Error fetching cart:", error);
+    return new NextResponse(
+      JSON.stringify({
+        status: 500,
+        success: false,
+        error: error.message || "Failed to fetch cart",
+      }),
+      {
+        status: 500,
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }
+    );
+  }
 }

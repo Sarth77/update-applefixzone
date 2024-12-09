@@ -1,4 +1,5 @@
 import Link from "next/link";
+import Image from "next/image";
 
 export default function Home() {
   return (
@@ -20,22 +21,28 @@ export default function Home() {
               <Link href="/products">
                 <button
                   className="inline-flex text-white bg-indigo-500 border-0 py-2 px-6 focus:outline-none hover:bg-indigo-600 rounded text-lg"
-                // onClick={() => navigate("/products")}
+                  // onClick={() => navigate("/products")}
                 >
                   Visit Collections
                 </button>
               </Link>
             </div>
           </div>
-          <div className="lg:max-w-lg lg:w-full md:w-1/2 w-5/6">
-            <img
-              className="object-cover object-center rounded"
-              alt="hero"
-              src="https://firebasestorage.googleapis.com/v0/b/applefixzone01.appspot.com/o/Displays%2FIPHONE-XS-MAX-COMBO-500x500.png?alt=media&token=71d8e48a-b259-49bc-8c2b-541a1e4f03b9"
-            />
+          <div className="lg:max-w-lg lg:w-full md:w-1/2 w-5/6 relative">
+            <div className="aspect-w-1 aspect-h-1 relative">
+              <Image
+                src="/HeroImg.png"
+                alt="iPhone Display"
+                width={500}
+                height={500}
+                priority={true}
+                className="object-contain rounded"
+                quality={90}
+              />
+            </div>
           </div>
         </div>
       </section>
     </main>
-  )
+  );
 }

@@ -1,31 +1,30 @@
 import { options } from "@/app/api/auth/[...nextauth]/options";
 import Profile from "@/components/auth/Profile";
-import axios from "axios";
+import { getUserAddress } from "@/lib/firebase/address";
 import { getServerSession } from "next-auth";
-import React from "react";
 
 const ProfilePage = async () => {
-    const addresses = {};
-    const session = await getServerSession(options)
-    if (session) {
-        const url = new URL(`${process.env.NEXT_PRODUCT_API}/api/address/${session?.user?.id}`)
-        const res = await axios.get(url, {
-            headers: { "Authorization": session?.accessToken }
-        })
-        const addresses = await res.data.data;
-        return (
-            <div>
-                <Profile addresses={addresses} usersession={session} />
-            </div>
-        );
+  try {
+    const session = await getServerSession(options);
+    let addresses = null;
+
+    if (session?.user?.id) {
+      addresses = await getUserAddress(session.user.id);
     }
+
     return (
-        <div>
-            <Profile addresses={addresses} />
-        </div>
+      <div>
+        <Profile addresses={addresses} usersession={session} />
+      </div>
     );
-
-
+  } catch (error) {
+    console.error("Error loading profile:", error);
+    return (
+      <div>
+        <Profile addresses={null} />
+      </div>
+    );
+  }
 };
 
 export default ProfilePage;
